@@ -1,0 +1,1 @@
+ALTER TABLE "folders" ADD COLUMN "location" varchar(255) NOT NULL;

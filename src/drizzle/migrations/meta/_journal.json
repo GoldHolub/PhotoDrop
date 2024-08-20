@@ -1,0 +1,62 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1722963943599,
+      "tag": "0000_opposite_adam_destine",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1723310957832,
+      "tag": "0001_breezy_vanisher",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1723399253176,
+      "tag": "0002_complex_peter_quill",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1723712745604,
+      "tag": "0003_little_vampiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1723721441228,
+      "tag": "0004_late_mattie_franklin",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1723989732414,
+      "tag": "0005_wonderful_frightful_four",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1724075671467,
+      "tag": "0006_flowery_molten_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1724139152101,
+      "tag": "0007_jazzy_mesmero",
+      "breakpoints": true
+    }
+  ]
+}

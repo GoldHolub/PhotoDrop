@@ -1,0 +1,1 @@
+ALTER TABLE "image_info" ADD COLUMN "is_purchased" boolean DEFAULT false;
