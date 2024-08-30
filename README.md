@@ -10,14 +10,14 @@ PhotoDrop Project
 - PostgreSQL (or any compatible database)
 - Retool.com for administrative operations
 
-**Installation**\
-Clone the repository:
+**Installation**
+>Clone the repository:
 
 ```
 git clone https://github.com/yourusername/photodrop-backend.git
 cd photodrop-backend
 ```
-Install dependencies:
+>Install dependencies:
 
 ```
 npm install
