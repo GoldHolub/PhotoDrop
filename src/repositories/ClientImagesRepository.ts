@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 export class ClientImagesRepository {
     async findImagesByClient(clientId: number) {
         const images = await db
-            .select({ imageId: imageInfo.id, folderId: imageInfo.folderId, isPurchased: imageInfo.isPurchased })
+            .select({ imageId: imageInfo.id, folderId: imageInfo.folderId, isPurchased: imageInfo.isPurchased, date: imageInfo.createdAt })
             .from(imagesToUsers)
             .where(eq(imagesToUsers.userId, clientId))
             .leftJoin(imageInfo, eq(imagesToUsers.imageInfoId, imageInfo.id));

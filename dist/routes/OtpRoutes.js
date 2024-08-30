@@ -1,8 +1,6 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import telegramOtpService from '../services/TelegramOtpService.js';
-dotenv.config();
 const router = express.Router();
 router.post('/api/otp/send-otp', async (req, res) => {
     const { phoneNumber } = req.body;
@@ -25,7 +23,7 @@ router.post('/api/otp/verify-otp', async (req, res) => {
             res.json({ token, message: 'your phone is verified' });
         }
         else {
-            res.status(400).json({ error: 'Invalid OTP or Phone(username)' });
+            res.status(400).json({ error: 'Invalid OTP or Phone' });
         }
     }
     catch (error) {

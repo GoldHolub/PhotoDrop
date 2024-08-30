@@ -8,7 +8,7 @@ export class ClientImagesController {
         // @ts-ignore
         const clientId = req.user?.id;
         try {
-            const images = await this.clientImagesService.getAllImages(clientId);
+            const images = await this.clientImagesService.getAllImagesAndBuyFirst(clientId);
             res.status(200).json(images);
         }
         catch (error) {

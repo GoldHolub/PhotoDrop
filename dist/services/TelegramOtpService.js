@@ -1,9 +1,7 @@
-import dotenv from 'dotenv';
 import TelegramBot from 'node-telegram-bot-api';
 import { ClientService } from './ClientService.js';
 import { ClientRepository } from '../repositories/ClientRepository.js';
-dotenv.config();
-const bot = new TelegramBot('7361639608:AAG4Cu12p4E_oSEZY_sPxJ4TgT1toqaXwsA', { polling: true });
+export const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 bot.onText(/\/start/, (msg, match) => {
     const chatId = msg.chat.id;
     const options = {
@@ -29,7 +27,8 @@ bot.on('contact', async (msg) => {
         bot.sendMessage(chatId, `Can't get access to your phone number`);
     }
     else {
-        await telegramOtpService.createAndAuthenticateClient(phoneNumber, chatId);
+        const checkedPhoneNumber = telegramOtpService.checkNumberAndFix(phoneNumber);
+        await telegramOtpService.createAndAuthenticateClient(checkedPhoneNumber, chatId);
         bot.sendMessage(chatId, `Thanks for sharing your phone number: ${phoneNumber}`);
     }
 });
@@ -39,31 +38,42 @@ export class TelegramOtpService {
         this.userOtpMap = new Map();
     }
     async sendOtp(phoneNumber) {
+        let checkedPhoneNumber;
         try {
+            checkedPhoneNumber = telegramOtpService.checkNumberAndFix(phoneNumber);
             const clientService = new ClientService();
-            const client = await clientService.findClientByPhone(phoneNumber);
+            const client = await clientService.findClientByPhone(checkedPhoneNumber);
             if (!client || !client.telegramChatId) {
                 return 'get OTP code: https://t.me/spicy_opt_verification_bot';
             }
             const otp = Math.floor(100000 + Math.random() * 900000).toString();
-            this.userOtpMap.set(phoneNumber, otp);
+            this.userOtpMap.set(checkedPhoneNumber, otp);
             const message = `Your verification code is ${otp}`;
             bot.sendMessage(client.telegramChatId, message);
             return 'OTP sent';
         }
         catch (error) {
-            throw new Error(`Can't send message by this number: ${phoneNumber}`);
+            throw new Error(`Can't send message by this number: ${checkedPhoneNumber}`);
         }
     }
     verifyOtp(phoneNumber, otp) {
-        const currentOTP = this.userOtpMap.get(phoneNumber);
-        this.userOtpMap.delete(phoneNumber);
+        const checkedPhoneNumber = telegramOtpService.checkNumberAndFix(phoneNumber);
+        const currentOTP = this.userOtpMap.get(checkedPhoneNumber);
+        this.userOtpMap.delete(checkedPhoneNumber);
         return currentOTP === otp;
+    }
+    checkNumberAndFix(phoneNumber) {
+        phoneNumber = phoneNumber.trim();
+        if (!phoneNumber.startsWith('+')) {
+            return `+${phoneNumber}`;
+        }
+        return phoneNumber;
     }
     async createAndAuthenticateClient(phoneNumber, chatId) {
         try {
             const clientRepository = new ClientRepository();
-            const existingClient = await clientRepository.findClientByPhone(phoneNumber);
+            const checkedPhoneNumber = telegramOtpService.checkNumberAndFix(phoneNumber);
+            const existingClient = await clientRepository.findClientByPhone(checkedPhoneNumber);
             if (existingClient) {
                 if (!existingClient.telegramChatId || existingClient.telegramChatId !== chatId) {
                     existingClient.telegramChatId = chatId;
@@ -71,7 +81,7 @@ export class TelegramOtpService {
                 }
                 return existingClient;
             }
-            const newClient = await clientRepository.createClient(phoneNumber, chatId);
+            const newClient = await clientRepository.createClient(checkedPhoneNumber, chatId);
             return newClient;
         }
         catch (error) {
@@ -79,7 +89,6 @@ export class TelegramOtpService {
         }
     }
 }
-// Instantiate the service
 const telegramOtpService = new TelegramOtpService();
 export default telegramOtpService;
 //# sourceMappingURL=TelegramOtpService.js.map

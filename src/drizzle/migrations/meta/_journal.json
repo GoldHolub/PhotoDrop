@@ -57,6 +57,13 @@
       "when": 1724139152101,
       "tag": "0007_jazzy_mesmero",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1724740175391,
+      "tag": "0008_lumpy_madame_web",
+      "breakpoints": true
     }
   ]
 }

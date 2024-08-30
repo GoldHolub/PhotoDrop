@@ -39,7 +39,7 @@ export class ImageController {
             // @ts-ignore
             const photographerId = req.user?.id;
             const imageInfo = await imageService.getImageById(imageId, photographerId);
-            return res.status(200).json({ images: imageInfo });
+            return res.status(200).json({ imageInfo });
         } catch (error) {
             // @ts-ignore
             return res.status(500).json({ error: error.message });

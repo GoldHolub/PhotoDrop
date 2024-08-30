@@ -15,6 +15,7 @@ export const Photographer = pgTable('photographers', {
     id: serial('id').primaryKey(),
     username: text('username'),
     password: text('password'),
+    role: varchar('role', { length: 50 }).default('photographer'),
 });
 export const users = pgTable('users', {
     id: serial('id').primaryKey(),
@@ -23,6 +24,7 @@ export const users = pgTable('users', {
     phoneNumber: varchar('phone_number', { length: 15 }).notNull().unique(),
     telegramChatId: integer('telegram_chat_id').unique(),
     selfieId: integer('selfie_id').references(() => userSelfies.id),
+    role: varchar('role', { length: 50 }).default('client'),
     createdAt: timestamp('created_at').defaultNow(),
 });
 export const userSelfies = pgTable('user_selfies', {

@@ -53,6 +53,10 @@ export class ImageRepository {
     }
 
     async deleteImageByIds(imageIds: number[]) {
+        const deletedCouplings = await db
+            .delete(imagesToUsers)
+            .where(inArray(imagesToUsers.imageInfoId, imageIds));
+
         const deletedImage = await db
             .delete(images)
             .where(inArray(images.imageInfoId, imageIds));
@@ -79,5 +83,23 @@ export class ImageRepository {
             .from(imagesToUsers);
 
         return imagesToUsersInfo;
+    }
+
+    async insertImageUserPairs(insertValues: Array<{ imageInfoId: number; userId: number }>) {
+        if (insertValues.length > 0) {
+            await db
+                .insert(imagesToUsers)
+                .values(insertValues);
+        }
+    }
+
+    async buyImagesByIds(imageIds: number[]) {
+        const purchasedImages = await db
+            .update(imageInfo)
+            .set({ isPurchased: true })
+            .where(inArray(imageInfo.id, imageIds))
+            .returning({ id: imageInfo.id, isPurchased: imageInfo.isPurchased });
+
+        return purchasedImages;
     }
 }

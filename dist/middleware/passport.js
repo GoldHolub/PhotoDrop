@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PhotographerRepository } from '../repositories/PhotographerRepository.js';
 import { ClientRepository } from '../repositories/ClientRepository.js';
+import telegramOtpService from '../services/TelegramOtpService.js';
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'your_jwt_secret',
@@ -17,7 +18,8 @@ export default passport.use(new Strategy(opts, async (jwt_payload, done) => {
             }
         }
         else if (jwt_payload.role === 'client') {
-            const user = await clientRepository.findClientByPhone(jwt_payload.phoneNumber);
+            const checkedPhoneNumber = telegramOtpService.checkNumberAndFix(jwt_payload.phoneNumber);
+            const user = await clientRepository.findClientByPhone(checkedPhoneNumber);
             if (user) {
                 return done(null, user);
             }
